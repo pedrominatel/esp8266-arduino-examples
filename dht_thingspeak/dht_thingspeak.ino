@@ -17,11 +17,11 @@
 #define DHTTYPE DHT11
 
 //Definir o SSID da rede WiFi
-const char* ssid = "LHC";
+const char* ssid = "ssid";
 //Definir a senha da rede WiFi
-const char* password = "tijolo22";
+const char* password = "password";
 
-String apiKey = "P18FTXZWOR0NF7AU";
+String apiKey = "XXXXXXXXXXXXXXXXXXX";
 const char* server = "api.thingspeak.com";
 
 DHT dht(DHT_DATA_PIN, DHTTYPE);
@@ -38,7 +38,7 @@ void setup() {
     delay(500);
     Serial.print(".");
   }
-  
+
   dht.begin();
 
   Serial.println("");
