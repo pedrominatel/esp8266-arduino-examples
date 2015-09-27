@@ -13,7 +13,7 @@
 #include "DHT.h"
 
 //Define do pino a ser utilizado no ESP para o sensor = GPIO4
-#define DHT_DATA_PIN 5
+#define DHT_DATA_PIN 4
 #define DHTTYPE DHT11
 
 //Definir o SSID da rede WiFi
@@ -21,6 +21,8 @@ const char* ssid = "ssid";
 //Definir a senha da rede WiFi
 const char* password = "password";
 
+//Colocar a API Key para escrita neste campo
+//Ela é fornecida no canal que foi criado na aba API Keys
 String apiKey = "XXXXXXXXXXXXXXXXXXX";
 const char* server = "api.thingspeak.com";
 
@@ -41,6 +43,7 @@ void setup() {
 
   dht.begin();
 
+  //Logs na porta serial
   Serial.println("");
   Serial.print("Conectado na rede ");
   Serial.println(ssid);
@@ -50,8 +53,11 @@ void setup() {
 
 void loop() {
 
+  //Espera 20 segundos para fazer a leitura
   delay(20000);
+  //Leitura de umidade
   float umidade = dht.readHumidity();
+  //Leitura de temperatura
   float temperatura = dht.readTemperature();
 
   //Se não for um numero retorna erro de leitura
@@ -60,6 +66,7 @@ void loop() {
     return;
   }
 
+  //Inicia um client TCP para o envio dos dados
   if (client.connect(server,80)) {
     String postStr = apiKey;
            postStr +="&field1=";
@@ -78,6 +85,7 @@ void loop() {
      client.print("\n\n");
      client.print(postStr);
 
+     //Logs na porta serial
      Serial.print("Temperatura: ");
      Serial.print(temperatura);
      Serial.print(" Umidade: ");
