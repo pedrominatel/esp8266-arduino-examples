@@ -35,11 +35,7 @@ void setup() {
   //Inicia o WiFi
   WiFi.begin(ssid, password);
 
-  //Espera a conexão no router
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
+\\
 
   dht.begin();
 

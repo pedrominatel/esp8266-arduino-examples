@@ -1,5 +1,4 @@
 #include <ESP8266WiFi.h>
-#include "DHT.h"
 #include "lcd_images.h"
 
 //#define PIN_SCE   5 //Pin 3 on LCD
@@ -7,31 +6,23 @@
 #define PIN_DC    12 //Pin 5 on LCD
 #define PIN_SDIN  13 //Pin 6 on LCD
 #define PIN_SCLK  14 //Pin 7 on LCD
-//The DC pin tells the LCD if we are sending a command or data
 #define LCD_COMMAND 0
 #define LCD_DATA  1
-//You may find a different size screen, but this one is 84 by 48 pixels
 #define LCD_X     84
 #define LCD_Y     48
 
-//Define do pino a ser utilizado no ESP para o sensor = GPIO4
-#define DHT_DATA_PIN 5
-#define DHTTYPE DHT11
-
-DHT dht(DHT_DATA_PIN, DHTTYPE);
-
 //WiFi Configuração
-const char* ssid     = "LHC";     // insert your SSID
-const char* password = "tijolo22P18FTXZWOR0NF7AU"; // insert your password
+const char* ssid     = "ssid";     // insert your SSID
+const char* password = "senha"; // insert your password
 
 unsigned long previousMillis = 0;
-const long interval = 4000; 
-
+const long interval = 4000;
+unsigned char wifi_connect_counter = 0;
 
 void setup() {
-  LCDInit(); //Init the LCD
+  LCDInit();
   LCDClear();
-  LCDBitmap(lhc_1bit); // display Bitcoin Logo
+  LCDBitmap(esp_1bit); //Logo
   delay(3000);
 
   //Configuração da UART
@@ -44,20 +35,20 @@ void setup() {
   //Inicia o WiFi
   WiFi.begin(ssid, password);
 
-  gotoXY(0, 0);
+  gotoXY(0, 1);
   //Espera a conexão no router
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
     LCDString(".");
+    wifi_connect_counter++;
+
+    if(wifi_connect_counter == 40){
+      break;
+    }
+
   }
-
   LCDClear();
-  gotoXY(0, 5);
-  LCDString("Conectado!!!");
-  
-  dht.begin();
-
 }
 
 void loop() {
@@ -66,43 +57,24 @@ void loop() {
 
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
-    
-    float umidade = dht.readHumidity();
-    float temperatura = dht.readTemperature();
-    
-    char temp_arr[8];
-    char umid_arr[4];
-    dtostrf(temperatura, 1, 1, temp_arr);
-    dtostrf(umidade, 1, 1, umid_arr);
 
     LCDClear();
 
     gotoXY(0, 0);
-    LCDString("ESP8266  DHT");
-    
+    LCDString("ESP8266  LCD");
+
     gotoXY(0, 1);
     LCDString("------------");
 
-    gotoXY(0, 2);
-    LCDString("TEMP: ");
-    LCDString(temp_arr);
-  
-    gotoXY(0, 3);
-    LCDString("UMID: ");
-    LCDString(umid_arr);
-
-    gotoXY(0, 4);
-    LCDString("------------");
-
     if(WiFi.status() != WL_CONNECTED) {
-    gotoXY(0, 5);
+    gotoXY(0, 2);
     LCDString("Erro no WiFi");
     } else {
-      gotoXY(0, 5);
+      gotoXY(0, 2);
       LCDString("Conectado!!!");
     }
   }
-  
+
 }
 
 void gotoXY(int x, int y) {
@@ -110,22 +82,16 @@ void gotoXY(int x, int y) {
   LCDWrite(0, 0x40 | y);  // Row     y - range: 0 to 5
 }
 
-//This takes a large array of bits and sends them to the LCD
 void LCDBitmap(char my_array[]){
   for (int index = 0 ; index < (LCD_X * LCD_Y / 8) ; index++)
     LCDWrite(LCD_DATA, my_array[index]);
 }
 
-//This function takes in a character, looks it up in the font table/array
-//And writes it to the screen
-//Each character is 8 bits tall and 5 bits wide. We pad one blank column of
-//pixels on each side of the character for readability.
 void LCDCharacter(char character) {
   LCDWrite(LCD_DATA, 0x00); //Blank vertical line padding
 
   for (int index = 0 ; index < 5 ; index++)
     LCDWrite(LCD_DATA, ASCII[character - 0x20][index]);
-    //0x20 is the ASCII character for Space (' '). The font table starts with this character
 
   LCDWrite(LCD_DATA, 0x00); //Blank vertical line padding
 }
