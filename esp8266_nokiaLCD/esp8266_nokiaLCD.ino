@@ -1,7 +1,7 @@
 #include <ESP8266WiFi.h>
 #include "lcd_images.h"
 
-//#define PIN_SCE   5 //Pin 3 on LCD
+#define PIN_SCE   5 //Pin 3 on LCD
 #define PIN_RESET 4 //Pin 4 on LCD
 #define PIN_DC    12 //Pin 5 on LCD
 #define PIN_SDIN  13 //Pin 6 on LCD
