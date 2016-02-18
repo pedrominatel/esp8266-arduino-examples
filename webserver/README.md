@@ -4,3 +4,5 @@ This example is to control the GPIOs over the web browser and was based on the A
 
 
 #### Usage...soon!
+
+http://pedrominatel.com.br/arduino/web-server-com-esp8266-e-ide-arduino/
