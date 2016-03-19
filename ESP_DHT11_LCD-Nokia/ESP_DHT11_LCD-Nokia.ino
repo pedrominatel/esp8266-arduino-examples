@@ -18,7 +18,7 @@
 #define DHT_DATA_PIN 5
 #define DHTTYPE DHT11
 
-DHT dht(DHT_DATA_PIN, DHTTYPE);
+DHT dht(DHT_DATA_PIN, DHTTYPE, 11);
 
 //WiFi Configuração
 const char* ssid     = "LHC";     // insert your SSID
