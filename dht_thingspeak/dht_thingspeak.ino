@@ -26,7 +26,7 @@ const char* password = "password";
 String apiKey = "XXXXXXXXXXXXXXXXXXX";
 const char* server = "api.thingspeak.com";
 
-DHT dht(DHT_DATA_PIN, DHTTYPE);
+DHT dht(DHT_DATA_PIN, DHTTYPE, 11);
 WiFiClient client;
 
 void setup() {
