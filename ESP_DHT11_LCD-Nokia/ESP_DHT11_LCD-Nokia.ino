@@ -21,8 +21,8 @@
 DHT dht(DHT_DATA_PIN, DHTTYPE, 11);
 
 //WiFi Configuração
-const char* ssid     = "LHC";     // insert your SSID
-const char* password = "tijolo22P18FTXZWOR0NF7AU"; // insert your password
+const char* ssid     = "<SSID>";     // insert your SSID
+const char* password = "<PASSWORD>"; // insert your password
 
 unsigned long previousMillis = 0;
 const long interval = 4000; 
