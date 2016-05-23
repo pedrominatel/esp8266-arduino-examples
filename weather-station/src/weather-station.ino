@@ -56,9 +56,9 @@ void parseWeatherInfo(String payload) {
   Serial.println(temp - 273.15, 2);
   Serial.printf("Umidade: %d%\n", humd);
   Serial.printf("Temperatura Maxima: ");
-  Serial.println(temp_m - 273.15, 2);
-  Serial.printf("Temperatura Minima: ");
   Serial.println(temp_p - 273.15, 2);
+  Serial.printf("Temperatura Minima: ");
+  Serial.println(temp_m - 273.15, 2);
   Serial.printf("Pressao Atm: %d\n", press);
 }
 
