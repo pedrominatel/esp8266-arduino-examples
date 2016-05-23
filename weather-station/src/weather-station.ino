@@ -5,11 +5,12 @@
 #include <ESP8266HTTPClient.h>
 
 void updateWeatherInfo(uint32_t deltaTime);
+void parseWeatherInfo(String payload);
 
 //Definir o SSID da rede WiFi
 const char* ssid = "ssid";
 //Definir a senha da rede WiFi
-const char* password = "pass";
+const char* password = "password";
 
 ESP8266WiFiMulti WiFiMulti;
 
@@ -18,7 +19,7 @@ FunctionTask taskGetInfo(updateWeatherInfo, MsToTaskTime(10000)); // turn on the
 
 #define JSON_BUFFER 2048
 //Definir a chave do site openweathermap.org
-char id[] = "524901&APPID=4590cd396eda3b53dda0643b4c09f1e8";
+char id[] = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 char city[] = "SaoPaulo";
 
 void setup() {
@@ -66,7 +67,7 @@ void updateWeatherInfo(uint32_t deltaTime) {
 
   String httpAsk = "http://api.openweathermap.org/data/2.5/weather?q=";
   httpAsk += city;
-  httpAsk += ",uk&id=";
+  httpAsk += ",uk&id=524901&APPID=";
   httpAsk += id;
 
   http.begin(httpAsk);
