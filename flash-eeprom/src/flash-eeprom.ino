@@ -1,4 +1,4 @@
-#include "FS.h"
+
 #include <EEPROM.h>
 
 //Define o quanto sera alocado entre 4 e 4096bytes
