@@ -15,12 +15,10 @@ int sensor_result = 0;
 void read_sensor(void){
 
   Wire.beginTransmission(u8_BH1750_address);
-	Wire.write(mode_HighResolution_1); // PORT A register
+	Wire.write(mode_HighResolution_1); //
 	Wire.endTransmission();
-
-  //delay(200);
-
-  Wire.requestFrom(u8_BH1750_address, 2); // request one byte of data from MCP20317
+	
+  Wire.requestFrom(u8_BH1750_address, 2); //
 
   if (2 <= Wire.available()) {
     sensor_result = Wire.read();
@@ -32,16 +30,11 @@ void read_sensor(void){
 
 
 void setup(void){
-
   Wire.begin();
   Serial.begin(115200);
-
 }
 
 void loop(void){
-
   read_sensor();
   delay(2000);
-
-
 }
