@@ -30,7 +30,7 @@ byte mode_HighResolution_1 = 0x10; //Modo de alta precisão com 1 lux de resolu�
 byte mode_HighResolution_2 = 0x11; //Modo de alta precisão com 0.5 lux de resolução
 byte mode_LowResolution = 0x13; //Modo de baixa precisão com 4 lux de resolução
 
-int16_t sensor_result = 0;
+uint16_t sensor_result = 0;
 
 void read_sensor(void){
 
