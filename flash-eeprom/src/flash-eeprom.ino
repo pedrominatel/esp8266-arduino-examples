@@ -36,12 +36,12 @@ void  setup() {
     Serial.printf("Saved position %d value %d\n", cnt, saved[cnt]);
   }
 
-  //EEPROM.begin(MEM_ALOC_SIZE);
-  //boot_num = EEPROM.read(0);
-  //boot_num++;
-  //EEPROM.write(0,boot_num);
-  //EEPROM.end();
-  //Serial.printf("Boot num: %d\n", boot_num);
+  EEPROM.begin(MEM_ALOC_SIZE);
+  boot_num = EEPROM.read(0);
+  boot_num++;
+  EEPROM.write(0,boot_num);
+  EEPROM.end();
+  Serial.printf("Boot num: %d\n", boot_num);
 }
 
 void loop() {
