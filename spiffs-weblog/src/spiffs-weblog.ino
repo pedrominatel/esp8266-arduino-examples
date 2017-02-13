@@ -21,8 +21,8 @@ SOFTWARE.
 #include "FS.h"
 #include <ESP8266WiFi.h>
 
-const char* ssid = "ssid";
-const char* password = "pass";
+const char* ssid = "SSID";
+const char* password = "PASS";
 String buf;
 
 WiFiServer server(80);
@@ -34,12 +34,14 @@ void formatFS(void){
 void createFile(void){
   File wFile;
 
+  //Cria o arquivo se ele não existir
   if(SPIFFS.exists("/log.txt")){
     Serial.println("Arquivo ja existe!");
   } else {
     Serial.println("Criando o arquivo...");
     wFile = SPIFFS.open("/log.txt","w+");
 
+    //Verifica a criação do arquivo
     if(!wFile){
       Serial.println("Erro ao criar arquivo!");
     } else {
@@ -50,6 +52,7 @@ void createFile(void){
 }
 
 void deleteFile(void) {
+  //Remove o arquivo
   if(SPIFFS.remove("/log.txt")){
     Serial.println("Erro ao remover arquivo!");
   } else {
@@ -58,25 +61,28 @@ void deleteFile(void) {
 }
 
 void writeFile(String msg) {
+
+  //Abre o arquivo para adição (append)
+  //Inclue sempre a escrita na ultima linha do arquivo
   File rFile = SPIFFS.open("/log.txt","a+");
 
   if(!rFile){
     Serial.println("Erro ao abrir arquivo!");
   } else {
-    rFile.println(msg);
+    rFile.println("Log: " + msg);
     Serial.println(msg);
   }
   rFile.close();
 }
 
 void readFile(void) {
+  //Faz a leitura do arquivo
   File rFile = SPIFFS.open("/log.txt","r");
   Serial.println("Reading file...");
   while(rFile.available()) {
     String line = rFile.readStringUntil('\n');
-    buf += "<li>";
     buf += line;
-    buf += "</li>";
+    buf += "<br />";
   }
   rFile.close();
 }
@@ -86,6 +92,7 @@ void closeFS(void){
 }
 
 void openFS(void){
+  //Abre o sistema de arquivos
   if(!SPIFFS.begin()){
     Serial.println("Erro ao abrir o sistema de arquivos");
   } else {
@@ -93,7 +100,6 @@ void openFS(void){
   }
 }
 
-//_____setup routine____________________________________________
 void setup(void){
   //Configura a porta serial para 115200bps
   Serial.begin(115200);
@@ -103,8 +109,10 @@ void setup(void){
   //Cria o arquivo caso o mesmo não exista
   createFile();
 
-  writeFile("Connecting to ");
-  writeFile(ssid);
+  writeFile("Booting ESP8266...");
+  writeFile("Connecting to " + (String)ssid);
+
+  //Inicia a conexão WiFi
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
@@ -115,11 +123,14 @@ void setup(void){
   writeFile("WiFi connected");
   Serial.println(WiFi.localIP());
 
+  //Inicia o webserver
   server.begin();
-  writeFile("Server started");
+  writeFile("Web Server started");
 }
 
 void loop(void){
+
+  //Tratamento das requisições http
   WiFiClient client = server.available();
   if (!client) {
     return;
@@ -138,10 +149,10 @@ void loop(void){
   buf = "";
 
   buf += "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE HTML>\r\n<html>\r\n";
-  buf += "<h3>ESP8266 Log</h3>";
-  buf += "<ul>";
+  buf += "<h3 style=""text-align: center;"">ESP8266 Web Log</h3>";
+  buf += "<p>";
   readFile();
-  buf += "</ul>";
+  buf += "</p>";
   buf += "<h4>Criado por Pedro Minatel</h4>";
   buf += "</html>\n";
 
